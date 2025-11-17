@@ -1,0 +1,4 @@
+Flask==2.3.3
+pytrends==4.9.2
+matplotlib==3.7.2
+pandas==2.0.3
