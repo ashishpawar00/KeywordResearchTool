@@ -3,3 +3,6 @@ pytrends==4.9.2
 matplotlib==3.7.2
 pandas==1.5.3
 numpy==1.24.3
+gunicorn==21.2.0
+setuptools>=68.0.0
+wheel
