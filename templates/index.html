@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Research Tool</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        header h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            padding: 0 10px;
+        }
+
+        header p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: clamp(1.25rem, 4vw, 2rem);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            gap: 0.5rem;
+        }
+
+        /* Tablet and desktop layout */
+        @media (min-width: 768px) {
+            .input-group {
+                flex-direction: row;
+                gap: 0;
+            }
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e9ecef;
+            font-size: 1rem;
+            outline: none;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+            width: 100%;
+        }
+
+        /* Tablet and desktop button */
+        @media (min-width: 768px) {
+            button {
+                width: auto;
+                border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            }
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .chart-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mobile table container with horizontal scroll */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1rem 0;
+            border-radius: var(--border-radius);
+        }
+
+        .data-table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .data-table tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .section-title {
+            font-size: clamp(1.25rem, 4vw, 1.5rem);
+            margin-bottom: 1rem;
+            color: var(--dark);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Error message styles */
+        .error-message {
+            background: #ffe6e6;
+            border-left: 4px solid #ff4444;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .error-message h3 {
+            color: #d63031;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message p {
+            color: #636e72;
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            background: #d1ecf1;
+            border-left: 4px solid #0dcaf0;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .success-message h3 {
+            color: #055160;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .keyword-suggestions {
+            background: #fff8e1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ffeaa7;
+            margin-top: 1rem;
+        }
+
+        .keyword-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .keyword-tag {
+            background: #4361ee;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .keyword-tag:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #4361ee;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .info-box h3 {
+            color: #4361ee;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Touch-friendly improvements */
+        @media (max-width: 767px) {
+            .container {
+                padding: 0 12px;
+            }
+            
+            header {
+                padding: 1.25rem 0;
+                margin-bottom: 1rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+                margin-bottom: 1.25rem;
+            }
+            
+            input[type="text"] {
+                padding: 0.75rem 1rem;
+                font-size: 16px;
+            }
+            
+            button {
+                padding: 0.75rem 1.25rem;
+                font-size: 1rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.85rem;
+            }
+            
+            /* Better touch targets */
+            button, input {
+                min-height: 44px;
+            }
+
+            .keyword-tags {
+                justify-content: center;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .container {
+                padding: 0 8px;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            header p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Keyword Research Tool</h1>
+            <p>Analyze search trends and discover keyword opportunities with our powerful research tool</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="info-box">
+            <h3>📊 Rate Limit Info</h3>
+            <p style="color: #4361ee; font-size: 0.9rem; margin: 0;">
+                <strong>Note:</strong> This tool uses automatic retries and delays to avoid Google rate limits. 
+                Please be patient as requests may take 10-30 seconds.
+            </p>
+        </div>
+
+        <div class="form-container card">
+            <h2 class="section-title">Search Trends</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="keyword">Enter a keyword to analyze</label>
+                    <div class="input-group">
+                        <input type="text" id="keyword" name="keyword" placeholder="e.g. python, music, travel" required>
+                        <button type="submit">Analyze Keyword</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Error Message Display -->
+        {% if error %}
+        <div class="error-message card">
+            <h3><span>⚠️</span> Error</h3>
+            <p>{{ error|safe }}</p>
+            <div class="keyword-suggestions">
+                <strong style="color: #856404;">Try these popular keywords:</strong>
+                <div class="keyword-tags">
+                    <button type="button" class="keyword-tag" onclick="setKeyword('python')">python</button>
+                    <button type="button" class="keyword-tag" onclick="setKeyword('music')">music</button>
+                    <button type="button" class="keyword-tag" onclick="setKeyword('travel')">travel</button>
+                    <button type="button" class="keyword-tag" onclick="setKeyword('food')">food</button>
+                    <button type="button" class="keyword-tag" onclick="setKeyword('sports')">sports</button>
+                    <button type="button" class="keyword-tag" onclick="setKeyword('weather')">weather</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Results Display -->
+        {% if results %}
+        <div class="success-message card">
+            <h3><span>✅</span> Success!</h3>
+            <p>Trend data successfully retrieved</p>
+        </div>
+
+        <div class="chart-container card">
+            <h2 class="section-title">Trend Chart</h2>
+            <img src="/static/chart.png" alt="Keyword Trend Chart">
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Data Table</h2>
+            <div class="table-container">
+                {{ results|safe }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Keyword Research Tool. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function setKeyword(keyword) {
+            document.getElementById('keyword').value = keyword;
+        }
+    </script>
+</body>
+</html>
