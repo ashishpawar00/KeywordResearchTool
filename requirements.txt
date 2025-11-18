@@ -1,3 +1,5 @@
+﻿setuptools>=65.0.0
+wheel
 Flask==2.3.3
 pytrends==4.9.2
 matplotlib==3.7.2
